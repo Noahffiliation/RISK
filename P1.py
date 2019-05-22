@@ -6,6 +6,7 @@ def getPlayerCountryList(player, countryD):
     for countryKey in countryD:
         if countryD[countryKey]["owner"] == player:
             countryList.append(countryKey)
+    
     return countryList
 
 def atLeastOneAdjacentEnemy(countryKey, player, countryD):
@@ -13,6 +14,7 @@ def atLeastOneAdjacentEnemy(countryKey, player, countryD):
     for each in adjacentCountriesD[countryKey]:
         if countryD[each]["owner"] != player:
             atLeastOne = True
+    
     return atLeastOne
 
 def hasPickedABook(playerD, player, indexList):
@@ -34,6 +36,7 @@ def hasPickedABook(playerD, player, indexList):
             cavCount += 1
         else:
             wildCount += 1
+
     # Check for three of a kind
     if artCount >= 3 or infCount >= 3 or cavCount >= 3:
         return True
@@ -41,9 +44,10 @@ def hasPickedABook(playerD, player, indexList):
         return True
     if wildCount >= 1:
         return True
+    
     return False
 
-def attackFromCountry(player, countryD, bookArmiesBonusList, playerDMe, manual = False):
+def attackFromCountry(player, countryD, bookArmiesBonusList, playerDMe, manual = True):
     countryList = []
     countList = []
     for countryKey in countryD:
@@ -51,7 +55,8 @@ def attackFromCountry(player, countryD, bookArmiesBonusList, playerDMe, manual =
             if atLeastOneAdjacentEnemy(countryKey, player, countryD):
                 countryList.append(countryKey)
                 countList.append(countryD[countryKey]["armies"])
-    if manual: # MANUAL
+    
+    if manual:
         if countryList == []:
             return "NO ATTACK"
         print("0. NO ATTACK")
@@ -70,7 +75,7 @@ def attackFromCountry(player, countryD, bookArmiesBonusList, playerDMe, manual =
             return "NO ATTACK"
         else:
             return countryList[choice-1]
-    else: # AUTOMATIC
+    else:
         if countryList == []:
             return "NO ATTACK"
         elif len(countryList) == 1:
@@ -83,7 +88,7 @@ def attackFromCountry(player, countryD, bookArmiesBonusList, playerDMe, manual =
                     else:
                         return countryList[country]
 
-def attackToCountry(player, countryD, bookArmiesBonusList, playerDMe, attackFromCountry, manual = False):
+def attackToCountry(player, countryD, bookArmiesBonusList, playerDMe, attackFromCountry, manual = True):
     # given the country attacking from
     # get the list of attached countries
     possiblesList = []
@@ -113,13 +118,13 @@ def attackToCountry(player, countryD, bookArmiesBonusList, playerDMe, attackFrom
         else:
             return possiblesList[randNum], countryD[possiblesList[randNum]]["owner"]
 
-def continueAttack(player, countryD, bookArmiesBonusList, playerDMe, manual = False):
+def continueAttack(player, countryD, bookArmiesBonusList, playerDMe, manual = True):
     if manual: # MANUAL
         return(input("Attack again? (Enter to attack, RETREAT and enter to end attack) => "))
     else: # AUTOMATIC
         return ""
         
-def getBookCardIndices(player, countryD, bookArmiesBonusList, playerDMe, manual = False):
+def getBookCardIndices(player, countryD, bookArmiesBonusList, playerDMe, manual = True):
     # print("IN PLAYER", player)
     listOfCardIndicesToPlay = []
     if manual: # MANUAL
@@ -148,7 +153,7 @@ def getBookCardIndices(player, countryD, bookArmiesBonusList, playerDMe, manual 
                 listOfCardIndicesToPlay.append(listOfIndices.pop(random.randrange(0, len(listOfIndices))))
     return listOfCardIndicesToPlay
 
-def tookCountryMoveArmiesHowMany(player, countryD, bookArmiesBonusList, playerDMe, attackFrom, manual = False):
+def tookCountryMoveArmiesHowMany(player, countryD, bookArmiesBonusList, playerDMe, attackFrom, manual = True):
     if manual: # MANUAL
         howManyToMove = input("\nHow many of the " + str(countryD[attackFrom]["armies"]-1) + " armies would you like to move? => ")
         if howManyToMove == "":
@@ -175,7 +180,7 @@ def tookCountryMoveArmiesHowMany(player, countryD, bookArmiesBonusList, playerDM
             howManyToMove = 1
     return howManyToMove
 
-def troopMove(player, countryD, bookArmiesBonusList, playerDMe, manual = False):
+def troopMove(player, countryD, bookArmiesBonusList, playerDMe, manual = True):
     fromCountry = ""
     toCountry = ""
     howManyToMove = 0
@@ -255,7 +260,7 @@ def troopMove(player, countryD, bookArmiesBonusList, playerDMe, manual = False):
         pass
     return fromCountry, toCountry, howManyToMove
 
-def placeArmies(player, countryD, bookArmiesBonusList, playerDMe, manual = False):
+def placeArmies(player, countryD, bookArmiesBonusList, playerDMe, manual = True):
     # print("PLAYER:", player)
     countryList = getPlayerCountryList(player, countryD)
     if manual: # MANUAL
