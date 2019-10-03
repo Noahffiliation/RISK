@@ -11,5 +11,5 @@ $ sudo apt-get install python3-tk
 - Run `copy.sh` to copy the `P1.py` into `P2.py`, `P3.py`, and `P4.py`
 
 ```
-$ python Risk.py
+$ python3 Risk.py
 ```
