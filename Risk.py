@@ -1,14 +1,11 @@
 import turtle
 import time
 import random
-from riskStructs import *
-import P1
-import P2
-import P3
-import P4
+from riskStructs import countryD, continentD, armiesPerContinentD
+import P1, P2, P3, P4
 
 # Struct for player information
-playerD = {1: {"armies": 30, "color": 'green', "loc": (-350, 257), "cards": []},
+playerd = {1: {"armies": 30, "color": 'green', "loc": (-350, 257), "cards": []},
            2: {"armies": 30, "color": 'blue', "loc": (220, 257), "cards": []},
            3: {"armies": 30, "color": 'purple', "loc": (220, -289), "cards": []},
            4: {"armies": 30, "color": 'red', "loc": (-350, -289), "cards": []}}
@@ -17,16 +14,16 @@ playerD = {1: {"armies": 30, "color": 'green', "loc": (-350, 257), "cards": []},
 manual = False
 
 # Bonus army counts
-bookArmiesBonusList = [4, 6, 8, 10, 12, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
+bookarmiesbonuslist = [4, 6, 8, 10, 12, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
 
 # Draw a rectangle
-def drawRectangle(t, x, y, width, height, text, fontSize, fontColor, offSet):
+def drawrectangle(t, x, y, width, height, text, fontsize, fontcolor, offset):
     t.up()
     t.goto(x, y)
     t.down()
     t.fillcolor("white")
     t.begin_fill()
-    for i in range(2):
+    for _ in range(2):
         t.forward(width)
         t.right(90)
         t.forward(height)
@@ -34,111 +31,111 @@ def drawRectangle(t, x, y, width, height, text, fontSize, fontColor, offSet):
     t.end_fill()
     if text != "":
         t.up()
-        t.goto(x + 5, y - height + offSet)
-        t.color(fontColor)
-        t.write(text, font = ('Arial', fontSize, 'bold'))
+        t.goto(x + 5, y - height + offset)
+        t.color(fontcolor)
+        t.write(text, font = ('Arial', fontsize, 'bold'))
     t.down()
 
 # Draw army count boxes for each player
-def drawPlayerBoxes(t, text, whichOnes):
-    for i in whichOnes:
-        t.color(playerD[i]["color"])
+def drawplayerboxes(t, text, whichones):
+    for i in whichones:
+        t.color(playerd[i]["color"])
         t.up()
-        t.goto(playerD[i]["loc"])
+        t.goto(playerd[i]["loc"])
         t.write("PLAYER " + str(i), font = ('Arial', 18, 'bold'))
-        drawRectangle(t, playerD[i]["loc"][0] + 120, playerD[i]["loc"][1] + 30, 62, 30, text, 18, playerD[i]["color"], 0)
+        drawrectangle(t, playerd[i]["loc"][0] + 120, playerd[i]["loc"][1] + 30, 62, 30, text, 18, playerd[i]["color"], 0)
 
     t.color("black")
 
 # Randomly assign countries to players
-def autoAssignCountries(t, player):
-    countryList = list(countryD.keys())
-    while len(countryList) > 0:
+def autoassigncountries(t, player):
+    countrylist = list(countryD.keys())
+    while len(countrylist) > 0:
         # Randomly assign a country to player and place army
-        country = countryList.pop(random.randrange(0, len(countryList)))
+        country = countrylist.pop(random.randrange(0, len(countrylist)))
         countryD[country]["owner"] = player
         countryD[country]["armies"] = 1
-        playerD[player]["armies"] -= 1
+        playerd[player]["armies"] -= 1
 
         # Draw updates
-        drawPlayerBoxes(t, str(playerD[player]["armies"]), [player])
-        drawRectangle(t, countryD[country]["loc"][0], countryD[country]["loc"][1], 31, 15, "1", 12, playerD[player]["color"], -3)
+        drawplayerboxes(t, str(playerd[player]["armies"]), [player])
+        drawrectangle(t, countryD[country]["loc"][0], countryD[country]["loc"][1], 31, 15, "1", 12, playerd[player]["color"], -3)
 
         # Rotate to next player
-        player = nextPlayer(player)
+        player = nextplayer(player)
 
     return player
 
 # Create card book for military units
-def createCards(countryD):
-    countryList = list(countryD.keys())
-    cardList = []
+def createcards(countryd):
+    countrylist = list(countryd.keys())
+    cardlist = []
 
     # Add two wild cards into the deck
     card = ["wild", "wild"]
-    cardList.append(card)
-    cardList.append(card)
+    cardlist.append(card)
+    cardlist.append(card)
 
     # Add units into deck
-    for i in range(14):
-        card = [countryList.pop(), "artillery"]
-        cardList.append(card)
+    for _ in range(14):
+        card = [countrylist.pop(), "artillery"]
+        cardlist.append(card)
 
-    for i in range(14):
-        card = [countryList.pop(), "cavalry"]
-        cardList.append(card)
+    for _ in range(14):
+        card = [countrylist.pop(), "cavalry"]
+        cardlist.append(card)
 
-    for i in range(14):
-        card = [countryList.pop(), "infantry"]
-        cardList.append(card)
-    
-    random.shuffle(cardList)
+    for _ in range(14):
+        card = [countrylist.pop(), "infantry"]
+        cardlist.append(card)
 
-    return cardList
+    random.shuffle(cardlist)
+
+    return cardlist
 
 # Determine if players still have armies to place
-def stillArmiesToPlace(player):
-    return playerD[player]["armies"] > 0
+def stillarmiestoplace(player):
+    return playerd[player]["armies"] > 0
 
 # Get list of countries the player owns
-def getPlayerCountryList(player):
-    countryList = []
-    for countryKey in countryD:
-        if countryD[countryKey]["owner"] == player:
-            countryList.append(countryKey)
-    
-    return countryList
+def getplayercountrylist(player):
+    countrylist = []
+    for countrykey in countryD:
+        if countryD[countrykey]["owner"] == player:
+            countrylist.append(countrykey)
+
+    return countrylist
 
 # Place armies in a country
-def armyPlacement(player, t):
-    country, numberOfArmiesToPlace = eval("P" + str(player)).placeArmies(player, playerD, manual)
-    countryD[country]["armies"] = countryD[country]["armies"] + numberOfArmiesToPlace
-    playerD[player]["armies"] = playerD[player]["armies"] - numberOfArmiesToPlace
+def armyplacement(player, t):
+    country, numberofarmiestoplace = eval("P" + str(player)).place_armies(player, playerd, manual)
+    countryD[country]["armies"] = countryD[country]["armies"] + numberofarmiestoplace
+    playerd[player]["armies"] = playerd[player]["armies"] - numberofarmiestoplace
 
-    print("\nPLAYER", player, "placing", numberOfArmiesToPlace, "armies", "\n")
-    
+    print("\nPLAYER", player, "placing", numberofarmiestoplace, "armies", "\n")
+
     # Draw updates
-    drawRectangle(t, countryD[country]["loc"][0], countryD[country]["loc"][1], 31, 15, countryD[country]["armies"], 12, playerD[player]["color"], -3)
-    drawPlayerBoxes(t, str(playerD[player]["armies"]), [player])
+    drawrectangle(t, countryD[country]["loc"][0], countryD[country]["loc"][1], 31, 15, countryD[country]["armies"], 12, playerd[player]["color"], -3)
+    drawplayerboxes(t, str(playerd[player]["armies"]), [player])
 
 # Rotate to the next player
-def nextPlayer(player):
+def nextplayer(player):
     player += 1
     if player == 5:
         player = 1
-    
+
     return player
 
 # Determine if a player owns every country
-def gameOver():
-    winnerList = []
+def gameover():
+    winnerlist = []
     for key in countryD:
-        winnerList.append(countryD[key]["owner"])
-    
-    return winnerList.count(winnerList[0]) == len(winnerList)
+        winnerlist.append(countryD[key]["owner"])
+
+    return winnerlist.count(winnerlist[0]) == len(winnerlist)
 
 # Calculate base army count
-def calcBaseArmiesBeginningOfTurn(player):
+def calcbasearmiesbeginningofturn(player):
     count = 0
     for key in countryD:
         if countryD[key]["owner"] == player:
@@ -148,275 +145,275 @@ def calcBaseArmiesBeginningOfTurn(player):
     return max(3, count // 3)
 
 # Determine continent bonus armies
-def findContinentsBonusBeginningOfTurn(player):
-    continentBonusTotal = 0
-    countryList = getPlayerCountryList(player)
-    for eachContinentKey in continentD:
-        ownsContinent = True
-        for eachCountry in continentD[eachContinentKey]:
-            if eachCountry not in countryList:
-                ownsContinent = False
+def findcontinentsbonusbeginningofturn(player):
+    continentbonustotal = 0
+    countrylist = getplayercountrylist(player)
+    for eachcontinentkey in continentD:
+        ownscontinent = True
+        for eachcountry in continentD[eachcontinentkey]:
+            if eachcountry not in countrylist:
+                ownscontinent = False
 
-        if ownsContinent:
-            continentBonusTotal += armiesPerContinentD[eachContinentKey]
+        if ownscontinent:
+            continentbonustotal += armiesPerContinentD[eachcontinentkey]
 
-    return continentBonusTotal
+    return continentbonustotal
 
 # Pick a country to attack
-def pickAttackTo(country, player):
-    return eval("P" + str(player)).attackToCountry(player, country, manual)
+def pick_attack_to(country, player):
+    return eval("P" + str(player)).attack_to_country(player, country, manual)
 
 # Draw the dice
-def drawDice(t, aDice, dDice):
+def drawdice(t, adice, ddice):
     t.up()
-    
+
     x = -80
     y = 300
-    for die in aDice:
-        drawRectangle(t, x, y, 40, 40, die, 26, "black", 0)
+    for die in adice:
+        drawrectangle(t, x, y, 40, 40, die, 26, "black", 0)
         x = x + 50
 
     x = -80
     y = 250
-    for die in dDice:
-        drawRectangle(t, x, y, 40, 40, die, 26, "black", 0)
+    for die in ddice:
+        drawrectangle(t, x, y, 40, 40, die, 26, "black", 0)
         x = x + 50
-    
+
     # Determine armies lost
-    attackIncrement = 0
-    defendIncrement = 0
-    if aDice[0] > dDice[0]:
-        defendIncrement -= 1
+    attackincrement = 0
+    defendincrement = 0
+    if adice[0] > ddice[0]:
+        defendincrement -= 1
     else:
-        attackIncrement -= 1
+        attackincrement -= 1
 
-    if len(dDice) == 2 and len(aDice) > 1:
-        if aDice[1] > dDice[1]:
-            defendIncrement -= 1
+    if len(ddice) == 2 and len(adice) > 1:
+        if adice[1] > ddice[1]:
+            defendincrement -= 1
         else:
-            attackIncrement -= 1
+            attackincrement -= 1
 
-    return attackIncrement, defendIncrement
+    return attackincrement, defendincrement
 
 # Roll the dice
-def rollDice(t, attackingPlayer, attackFrom, attackTo):
+def rolldice(t, attackingplayer, attackfrom, attackto):
     # Determine how many attack dice to roll
-    if countryD[attackFrom]["armies"] == 3:
-        attackNumDice = 2
-    elif countryD[attackFrom]["armies"] == 2:
-        attackNumDice = 1
+    if countryD[attackfrom]["armies"] == 3:
+        attacknumdice = 2
+    elif countryD[attackfrom]["armies"] == 2:
+        attacknumdice = 1
     else:
-        attackNumDice = 3
-    
-    # Roll the dice
-    aDice = []
-    for i in range(attackNumDice):
-        aDice.append(random.randint(1, 6))
+        attacknumdice = 3
 
-    aDice.sort(reverse = True)
+    # Roll the dice
+    adice = []
+    for _ in range(attacknumdice):
+        adice.append(random.randint(1, 6))
+
+    adice.sort(reverse = True)
 
     # Determine how many defend dice to roll
-    if countryD[attackTo]["armies"] == 1:
-        defendNumDice = 1
+    if countryD[attackto]["armies"] == 1:
+        defendnumdice = 1
     else:
-        defendNumDice = 2
-    
-    # Roll the dice
-    dDice = []
-    for i in range(defendNumDice):
-        dDice.append(random.randint(1, 6))
+        defendnumdice = 2
 
-    dDice.sort(reverse = True)
+    # Roll the dice
+    ddice = []
+    for _ in range(defendnumdice):
+        ddice.append(random.randint(1, 6))
+
+    ddice.sort(reverse = True)
 
     # Battle of armies
-    attackIncrement, defendIncrement = drawDice(t, aDice, dDice)
-    countryD[attackFrom]["armies"] += attackIncrement
-    countryD[attackTo]["armies"] += defendIncrement
+    attackincrement, defendincrement = drawdice(t, adice, ddice)
+    countryD[attackfrom]["armies"] += attackincrement
+    countryD[attackto]["armies"] += defendincrement
 
-    print("Attacking armies:", countryD[attackFrom]["armies"], "Defending armies:", countryD[attackTo]["armies"])
+    print("Attacking armies:", countryD[attackfrom]["armies"], "Defending armies:", countryD[attackto]["armies"])
 
     # If defending army is defeated, attacking player owns country
-    if countryD[attackTo]["armies"] <= 0:
-        countryD[attackTo]["armies"] = 0
-        countryD[attackTo]["owner"] = attackingPlayer
+    if countryD[attackto]["armies"] <= 0:
+        countryD[attackto]["armies"] = 0
+        countryD[attackto]["owner"] = attackingplayer
 
     # Draw updates
-    drawRectangle(t, countryD[attackFrom]["loc"][0], countryD[attackFrom]["loc"][1], 31, 15, countryD[attackFrom]["armies"], 12, playerD[attackingPlayer]["color"], -3)
-    drawRectangle(t, countryD[attackTo]["loc"][0], countryD[attackTo]["loc"][1], 31, 15, countryD[attackTo]["armies"], 12, playerD[countryD[attackTo]["owner"]]["color"], -3)
+    drawrectangle(t, countryD[attackfrom]["loc"][0], countryD[attackfrom]["loc"][1], 31, 15, countryD[attackfrom]["armies"], 12, playerd[attackingplayer]["color"], -3)
+    drawrectangle(t, countryD[attackto]["loc"][0], countryD[attackto]["loc"][1], 31, 15, countryD[attackto]["armies"], 12, playerd[countryD[attackto]["owner"]]["color"], -3)
 
 # Determine if a player owns any countries
-def noDefendingPlayerLeft(defendingPlayer):
-    noneLeft = True
+def nodefendingplayerleft(defendingplayer):
+    noneleft = True
     for country in countryD:
-        if countryD[country]["owner"] == defendingPlayer:
-            noneLeft = False
-    
-    return noneLeft
+        if countryD[country]["owner"] == defendingplayer:
+            noneleft = False
+
+    return noneleft
 
 # Determine if a player successfully captures a country
-def attackNeighboringCountry(t, player):
-    # Use temporary turtle to deal with ataccking/defending army counts
-    dT = turtle.Turtle()
-    dT.ht()
-    countryCaptured = False
-    attackFrom = eval("P" + str(player)).attackFromCountry(player, manual)
-    print("Attacking from", attackFrom)
-    while attackFrom != "NO ATTACK":
+def attackneighboringcountry(t, player):
+    # Use temporary turtle to deal with attacking/defending army counts
+    dt = turtle.Turtle()
+    dt.ht()
+    countrycaptured = False
+    attackfrom = eval("P" + str(player)).attack_from_country(player, manual)
+    print("Attacking from", attackfrom)
+    while attackfrom != "NO ATTACK":
         # present list of countries owned with more than one army, 0 element is no attack
-        attackTo, defendingPlayer = pickAttackTo(attackFrom, player)
-        print("\nAttacking", attackTo)
+        attackto, defendingplayer = pick_attack_to(attackfrom, player)
+        print("\nAttacking", attackto)
 
         # Determine if a player can continue attacking
-        continueAttack = ""
-        while continueAttack != "RETREAT" and countryD[attackTo]["armies"] > 0 and countryD[attackFrom]["armies"] > 1:
+        continueattack = ""
+        while continueattack != "RETREAT" and countryD[attackto]["armies"] > 0 and countryD[attackfrom]["armies"] > 1:
             # Roll dice for battle
-            rollDice(dT, player, attackFrom, attackTo)
+            rolldice(dt, player, attackfrom, attackto)
 
             # Determine if the attacking player wants to attack again
-            continueAttack = eval("P" + str(player)).continueAttack(countryD[attackTo]["armies"], countryD[attackFrom]["armies"], manual)
+            continueattack = eval("P" + str(player)).continue_attack(countryD[attackto]["armies"], countryD[attackfrom]["armies"], manual)
 
-            dT.clear()
+            dt.clear()
 
         # Attacking player takes over the country
-        if continueAttack != "RETREAT" and countryD[attackTo]["armies"] <= 0:
-            countryCaptured = True
-            print("\nYou took over " + attackTo + "!")
+        if continueattack != "RETREAT" and countryD[attackto]["armies"] <= 0:
+            countrycaptured = True
+            print("\nYou took over " + attackto + "!")
             # Determine how many armies the player wants to move to the new country
-            howManyToMove = eval("P"+str(player)).tookCountryMoveArmiesHowMany(attackFrom, manual)
-            print("Moving", howManyToMove, "armies\n")
+            howmanytomove = eval("P"+str(player)).took_country_move_armies_how_many(attackfrom, manual)
+            print("Moving", howmanytomove, "armies\n")
 
-            countryD[attackFrom]["armies"] -= howManyToMove
-            countryD[attackTo]["armies"] = howManyToMove
-            attackFromCountryIndex = countryD[attackFrom]["loc"]
-            attackToCountryIndex = countryD[attackTo]["loc"]
+            countryD[attackfrom]["armies"] -= howmanytomove
+            countryD[attackto]["armies"] = howmanytomove
+            attackfromcountryindex = countryD[attackfrom]["loc"]
+            attacktocountryindex = countryD[attackto]["loc"]
 
             # Draw updates
-            drawRectangle(t, attackFromCountryIndex[0], attackFromCountryIndex[1], 31, 15, countryD[attackFrom]["armies"], 12, playerD[player]["color"], -3)
-            drawRectangle(t, attackToCountryIndex[0], attackToCountryIndex[1], 31, 15, countryD[attackTo]["armies"], 12, playerD[countryD[attackTo]["owner"]]["color"], -3)
+            drawrectangle(t, attackfromcountryindex[0], attackfromcountryindex[1], 31, 15, countryD[attackfrom]["armies"], 12, playerd[player]["color"], -3)
+            drawrectangle(t, attacktocountryindex[0], attacktocountryindex[1], 31, 15, countryD[attackto]["armies"], 12, playerd[countryD[attackto]["owner"]]["color"], -3)
 
             # Attacking player has wiped out another player
-            if noDefendingPlayerLeft(defendingPlayer):
-                print("You destroyed player", defendingPlayer, "- his cards are now yours!")
-                
+            if nodefendingplayerleft(defendingplayer):
+                print("You destroyed player", defendingplayer, "- his cards are now yours!")
+
                 # Give the defenders cards to the player
-                playerD[player]["cards"] += (playerD[defendingPlayer]["cards"])
-                playerD[defendingPlayer]["cards"] = []
+                playerd[player]["cards"] += (playerd[defendingplayer]["cards"])
+                playerd[defendingplayer]["cards"] = []
 
                 # Determine new army count
-                bookArmies = 0
-                while hasABook(player):
-                    bookArmies += playBooks(player, t)
+                bookarmies = 0
+                while has_a_book(player):
+                    bookarmies += playbooks(player, t)
 
-                playerD[player]["armies"] = bookArmies
+                playerd[player]["armies"] = bookarmies
 
                 # Draw updates
-                drawPlayerBoxes(t, bookArmies, [player])
+                drawplayerboxes(t, bookarmies, [player])
 
                 # Repeat until no armies left in corner
-                while stillArmiesToPlace(player):
+                while stillarmiestoplace(player):
                     # Display list and ask for country choice and number to place, update displays
-                    armyPlacement(player, t)
+                    armyplacement(player, t)
 
         # Attacker chose to retreat or attacker ran out of armies
         else:
-            if continueAttack == "RETREAT":
+            if continueattack == "RETREAT":
                 print("\nAttacker chose to RETREAT!")
             else:
                 print("Attacker ran out of armies!")
 
-        attackFromCountryIndex = countryD[attackFrom]["loc"]
-        attackToCountryIndex = countryD[attackTo]["loc"]
+        attackfromcountryindex = countryD[attackfrom]["loc"]
+        attacktocountryindex = countryD[attackto]["loc"]
 
         # Draw updates
-        drawRectangle(t, attackFromCountryIndex[0], attackFromCountryIndex[1], 31, 15, countryD[attackFrom]["armies"], 12, playerD[player]["color"], -3)
-        drawRectangle(t, attackToCountryIndex[0], attackToCountryIndex[1], 31, 15, countryD[attackTo]["armies"], 12, playerD[countryD[attackTo]["owner"]]["color"], -3)
-        
-        attackFrom = eval("P" + str(player)).attackFromCountry(player, manual)
-        print("Attacking from", attackFrom)
-    
-    return countryCaptured
+        drawrectangle(t, attackfromcountryindex[0], attackfromcountryindex[1], 31, 15, countryD[attackfrom]["armies"], 12, playerd[player]["color"], -3)
+        drawrectangle(t, attacktocountryindex[0], attacktocountryindex[1], 31, 15, countryD[attackto]["armies"], 12, playerd[countryD[attackto]["owner"]]["color"], -3)
+
+        attackfrom = eval("P" + str(player)).attack_from_country(player, manual)
+        print("Attacking from", attackfrom)
+
+    return countrycaptured
 
 # Move troops to a new location
-def troopMovement(player, t):
+def troop_movement(player, t):
     # Get movement info from player
-    fromCountry, toCountry, howManyToMove = eval("P" + str(player)).troopMove(player, manual)
+    from_country, to_country, how_many_to_move = eval("P" + str(player)).troop_move(player, manual)
 
     # Movement is optional
-    if fromCountry != "" and howManyToMove != 0:
-        countryD[fromCountry]["armies"] -= howManyToMove
-        countryD[toCountry]["armies"] += howManyToMove
+    if from_country != "" and how_many_to_move != 0:
+        countryD[from_country]["armies"] -= how_many_to_move
+        countryD[to_country]["armies"] += how_many_to_move
 
-        print("\nPLAYER", player, "moved", howManyToMove, "armies from", fromCountry, "to", toCountry)
+        print("\nPLAYER", player, "moved", how_many_to_move, "armies from", from_country, "to", to_country)
 
         # Draw updates
-        drawRectangle(t, countryD[fromCountry]["loc"][0], countryD[fromCountry]["loc"][1], 31, 15, countryD[fromCountry]["armies"], 12, playerD[player]["color"], -3)
-        drawRectangle(t, countryD[toCountry]["loc"][0], countryD[toCountry]["loc"][1], 31, 15, countryD[toCountry]["armies"], 12, playerD[player]["color"], -3)
+        drawrectangle(t, countryD[from_country]["loc"][0], countryD[from_country]["loc"][1], 31, 15, countryD[from_country]["armies"], 12, playerd[player]["color"], -3)
+        drawrectangle(t, countryD[to_country]["loc"][0], countryD[to_country]["loc"][1], 31, 15, countryD[to_country]["armies"], 12, playerd[player]["color"], -3)
 
 # Determine if a player has countries
-def playerHasNoCountries(player):
-    return len(eval("P" + str(player)).getPlayerCountryList(player)) == 0
+def player_has_no_countries(player):
+    return len(eval("P" + str(player)).get_player_country_list(player)) == 0
 
 # Determine if a player has a book
-def hasABook(player):
-    if len(playerD[player]["cards"]) < 3:
+def has_a_book(player):
+    if len(playerd[player]["cards"]) < 3:
         return False
-    
+
     # Count each unit type
-    artCount = 0
-    infCount = 0
-    cavCount = 0
-    wildCount = 0
-    for card in playerD[player]["cards"]:
+    artcount = 0
+    infcount = 0
+    cavcount = 0
+    wildcount = 0
+    for card in playerd[player]["cards"]:
         if card[1] == "artillery":
-            artCount += 1
+            artcount += 1
         elif card[1] == "infantry":
-            infCount += 1
+            infcount += 1
         elif card[1] == "cavalry":
-            cavCount += 1
+            cavcount += 1
         else:
-            wildCount += 1
+            wildcount += 1
 
     # Check for three of a kind
-    if artCount >= 3 or infCount >= 3 or cavCount >= 3:
+    if artcount >= 3 or infcount >= 3 or cavcount >= 3:
         return True
-    if artCount >= 1 and infCount >= 1 and cavCount >= 1:
+    if artcount >= 1 and infcount >= 1 and cavcount >= 1:
         return True
-    if wildCount >= 1:
+    if wildcount >= 1:
         return True
 
     return False
 
-def playBooks(player, t):
-    bookArmies = 0
+def playbooks(player, t):
+    bookarmies = 0
 
     # Display the player's cards with and index number beside them, also display a menu item to exit
-    bookCardIndices = eval("P" + str(player)).getBookCardIndices(player, playerD, manual)
-    print("INDICES", bookCardIndices)
-    print("CARDS", playerD[player]["cards"])
+    bookcardindices = eval("P" + str(player)).get_book_card_indices(player, playerd, manual)
+    print("INDICES", bookcardindices)
+    print("CARDS", playerd[player]["cards"])
 
-    if len(bookCardIndices) != 0:
-        bookCardIndices.sort(reverse = True)
-        bookArmies += bookArmiesBonusList.pop(0)
+    if len(bookcardindices) != 0:
+        bookcardindices.sort(reverse = True)
+        bookarmies += bookarmiesbonuslist.pop(0)
 
-    countryList = getPlayerCountryList(player)
-    for index in bookCardIndices:
+    countrylist = getplayercountrylist(player)
+    for index in bookcardindices:
         # Allocate 2 armies to any country in my book and get rid of the played cards
         print("Popping", index)
-        print(playerD[player]["cards"])
-        card = playerD[player]["cards"].pop(index)
-        if card[0] in countryList:
+        print(playerd[player]["cards"])
+        card = playerd[player]["cards"].pop(index)
+        if card[0] in countrylist:
             print("Country OWNED IN BOOK BONUS")
             # Put two armies on that country
             countryD[card[0]]["armies"] = countryD[card[0]]["armies"] + 2
-            drawRectangle(t, countryD[card[0]]["loc"][0], countryD[card[0]]["loc"][1], 31, 15, countryD[card[0]]["armies"], 12, playerD[countryD[card[0]]["owner"]]["color"], -3)
-    
-    return bookArmies
+            drawrectangle(t, countryD[card[0]]["loc"][0], countryD[card[0]]["loc"][1], 31, 15, countryD[card[0]]["armies"], 12, playerd[countryD[card[0]]["owner"]]["color"], -3)
 
-def drawCountryArmies(t):
+    return bookarmies
+
+def drawcountryarmies(t):
     for country in countryD:
-        drawRectangle(t, countryD[country]["loc"][0], countryD[country]["loc"][1], 31, 15, countryD[country]["armies"], 12, playerD[countryD[country]["owner"]]["color"], -3)    
-    
-def riskMain():
+        drawrectangle(t, countryD[country]["loc"][0], countryD[country]["loc"][1], 31, 15, countryD[country]["armies"], 12, playerd[countryD[country]["owner"]]["color"], -3)
+
+def riskmain():
     # Screen and turtle setup
     bob = turtle.Turtle()
     bob.ht()
@@ -426,68 +423,68 @@ def riskMain():
     screen.bgpic("Risk01.gif")
 
     # Draw player army count boxes
-    drawPlayerBoxes(bob, "30", [1, 2, 3, 4])
+    drawplayerboxes(bob, "30", [1, 2, 3, 4])
 
     # Randomly set the first player
     player = random.randrange(1, 5)
-    player = autoAssignCountries(bob, player)
+    player = autoassigncountries(bob, player)
 
     # Place armies while players still have armies to place
-    while stillArmiesToPlace(player):
-        armyPlacement(player, bob)
-        player = nextPlayer(player)
+    while stillarmiestoplace(player):
+        armyplacement(player, bob)
+        player = nextplayer(player)
 
     # Create the card deck of military units
-    riskCards = createCards(countryD)
+    riskcards = createcards(countryD)
 
     print("\n\n" + "*" * 30+ "\nBEGINNING OF GAME PLAY\n" + "*" * 30)
 
     # Main game loop
-    while not gameOver():
+    while not gameover():
         print("\nSTART PLAYER", player, "TURN")
         # Print cards
-        if playerD[player]["cards"] != 0:
+        if playerd[player]["cards"] != 0:
             print("PLAYER", player, "CARDS:")
-            for card in playerD[player]["cards"]:
+            for card in playerd[player]["cards"]:
                 print(card)
 
-        print("NEXT BOOK:", bookArmiesBonusList[0])
+        print("NEXT BOOK:", bookarmiesbonuslist[0])
 
         # Calculate total number of armies to place
-        bookArmies = 0
-        if hasABook(player):
-            bookArmies = playBooks(player, bob)
+        bookarmies = 0
+        if has_a_book(player):
+            bookarmies = playbooks(player, bob)
 
-        armiesToPlace = calcBaseArmiesBeginningOfTurn(player)
-        continentsBonus = findContinentsBonusBeginningOfTurn(player)
-        totalArmies = armiesToPlace + continentsBonus + bookArmies
-        playerD[player]["armies"] = totalArmies
-        drawPlayerBoxes(bob, totalArmies, [player])
+        armiestoplace = calcbasearmiesbeginningofturn(player)
+        continentsbonus = findcontinentsbonusbeginningofturn(player)
+        totalarmies = armiestoplace + continentsbonus + bookarmies
+        playerd[player]["armies"] = totalarmies
+        drawplayerboxes(bob, totalarmies, [player])
 
         # Repeat until no armies left
-        while stillArmiesToPlace(player):
+        while stillarmiestoplace(player):
             # Display list and ask for country choice and number to place, update displays
-            armyPlacement(player, bob)
+            armyplacement(player, bob)
 
         # Determing if a player catpured a country
-        countryCaptured = attackNeighboringCountry(bob, player)
-        if countryCaptured and len(riskCards) > 0:
-            playerD[player]["cards"].append(riskCards.pop())
+        countrycaptured = attackneighboringcountry(bob, player)
+        if countrycaptured and len(riskcards) > 0:
+            playerd[player]["cards"].append(riskcards.pop())
 
         # Move troops after attacking
-        troopMovement(player, bob)
+        troop_movement(player, bob)
 
         print("\nEND PLAYER", player, "TURN")
 
         # Rotate to next player
-        player = nextPlayer(player)
-        while playerHasNoCountries(player):
-            player = nextPlayer(player)
-        
+        player = nextplayer(player)
+        while player_has_no_countries(player):
+            player = nextplayer(player)
+
         time.sleep(1)
 
     # Win message
     print("Congratulations player " + str(countryD["Western United States"]["owner"]) + ", you are the winner!!!")
 
 # Run the game
-riskMain()
+riskmain()
