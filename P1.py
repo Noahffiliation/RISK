@@ -267,6 +267,9 @@ def troop_move(player, manual):
             else:
                 how_many_to_move = countryD[troop_movement_candidate_from_list[from_choice]]["armies"] - 1
 
+        max_armies_from = from_country
+        min_armies = troop_movement_candidate_to_list[to_choice]
+
     # AUTOMATIC
     else:
         # Build list to determine where to move armies from
@@ -299,7 +302,7 @@ def troop_move(player, manual):
             return "", "", 0
 
         # Determine where to move armies to
-        min_armies = ""
+        min_armies = troop_movement_candidate_to_list[0]
         for country in range(1, len(troop_movement_candidate_to_list)):
             if countryD[troop_movement_candidate_to_list[country]]["armies"] < countryD[troop_movement_candidate_to_list[country - 1]]["armies"]:
                 min_armies = troop_movement_candidate_to_list[country]

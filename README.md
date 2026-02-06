@@ -1,17 +1,7 @@
 <h3 align="center">RISK</h3>
 
-<div align="center">
-
-  [![Status](https://img.shields.io/badge/status-active-success.svg)]() 
-  [![GitHub Issues](https://img.shields.io/github/issues/Noahffiliation/RISK.svg)](https://github.com/Noahffiliation/RISK/issues)
-  [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/Noahffiliation/RISK.svg)](https://github.com/Noahffiliation/RISK/pulls)
-  
-</div>
-
----
-
 <p align="center"> Automated RISK using basic AI players
-    <br> 
+    <br>
 </p>
 
 ## Table of Contents
@@ -29,12 +19,6 @@ Recreating the game of Risk in Python, while also adding in automated players to
 ## Getting Started <a name = "getting_started"></a>
 These instructions will get you a copy of the project up and running on your local machine for development purposes.
 
-### Prerequisites
-- tkinter
-```
-$ sudo apt-get install python3-tk
-```
-
 ## Usage <a name="usage"></a>
 Build your player as `P1.py`
 
@@ -42,7 +26,7 @@ Run `copy.sh` to create the other players based off of `P1.py`
 
 Run the game
 ```
-$ python3 Risk.py
+$ python Risk.py
 ```
 
 ## Authors <a name = "authors"></a>

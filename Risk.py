@@ -487,4 +487,5 @@ def riskmain():
     print("Congratulations player " + str(countryD["Western United States"]["owner"]) + ", you are the winner!!!")
 
 # Run the game
-riskmain()
+if __name__ == "__main__":
+    riskmain()
