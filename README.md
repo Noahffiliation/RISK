@@ -35,8 +35,9 @@ $ sudo apt-get install python3-tk
 These instructions will get you a copy of the project up and running on your local machine for development purposes.
 
 ## Usage
-- Run `copy.sh` to copy the `P1.py` into `P2.py`, `P3.py`, and `P4.py`
+- Requires cTurtle, which is available [here](http://www.pythonworks.org/system/app/pages/search?scope=search-site&q=cturtle)
+- Run copy.bat to copy the P1.py into P2.py, P3.py, and P4.py
 
 ```
-$ python Risk.py
+>>>python Risk.py
 ```
