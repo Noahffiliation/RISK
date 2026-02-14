@@ -19,19 +19,19 @@ countryD={
     "Western United States":{"loc":[-294,54],"owner":0},
     "Eastern United States":{"loc":[-231,38],"owner":0},
     "Central America":{"loc":[-276,5],"owner":0},
-
+    
     "Venezuela":{"loc":[-233,-40],"owner":0},
     "Peru":{"loc":[-206,-106],"owner":0},
     "Brazil":{"loc":[-165,-90],"owner":0},
     "Argentina":{"loc":[-183,-143],"owner":0},
-
+    
     "North Africa":{"loc":[-38,-77],"owner":0},
     "Egypt":{"loc":[30,-50],"owner":0},
     "East Africa":{"loc":[55,-99],"owner":0},
     "Central Africa":{"loc":[23,-108],"owner":0},
     "South Africa":{"loc":[25,-195],"owner":0},
     "Madagascar":{"loc":[116,-190],"owner":0},
-
+    
     "Western Europe":{"loc":[-77,3],"owner":0},
     "Southern Europe":{"loc":[0,23],"owner":0},
     "Northern Europe":{"loc":[-28,67],"owner":0},
@@ -39,7 +39,7 @@ countryD={
     "Great Britain":{"loc":[-92,73],"owner":0},
     "Iceland":{"loc":[-71,140],"owner":0},
     "Scandinavia":{"loc":[-6,130],"owner":0},
-
+    
     "Ural":{"loc":[149,120],"owner":0},
     "Siberia":{"loc":[193,142],"owner":0},
     "Yakutsk":{"loc":[249,185],"owner":0},
@@ -80,7 +80,7 @@ def drawRectangle(t,x,y,width,height,text,fontSize,fontColor,offSet):
     t.down()
     t.fillcolor("white")
     t.begin_fill()
-    for _ in range(2):
+    for i in range(2):
         t.forward(width)
         t.right(90)
         t.forward(height)
@@ -136,7 +136,7 @@ def getPlayerCountryList(player):
         if countryD[countryKey]["owner"]==player:
             countryList.append(countryKey)
     return countryList
-
+    
 def armyPlacement(player,t,phase):
     if playerD[player]["armies"]>0:
         country,numberOfArmiesToPlace=eval("P"+str(player)).placeArmies(player,countryD,bookArmiesBonusList,{player:playerD[player]})
@@ -242,7 +242,7 @@ def noDefendingPlayerLeft(defendingPlayer):
         if countryD[country]["owner"]==defendingPlayer:
             noneLeft=False
     return noneLeft
-
+    
 def attackNeighboringCountry(t,player):
     dT=cTurtle.Turtle()
     dT.ht()
@@ -281,7 +281,7 @@ def attackNeighboringCountry(t,player):
                 bookArmies=0
                 while hasABook(player):
                     bookArmies+=playBooks(player,t)
-                playerD[player]["armies"]=bookArmies
+                playerD[player]["armies"]=bookArmies        
                 drawPlayerBoxes(t,bookArmies,[player])
                 #Repeat until no armies left in corner
                 while stillArmiesToPlace(playerD):
@@ -344,7 +344,6 @@ def hasABook(player):
         return True
     if wildCount>=1:
         return True
-
     return False
 
 def playBooks(player,t):
@@ -370,10 +369,10 @@ def playBooks(player,t):
             drawRectangle(t,countryD[card[0]]["loc"][0],countryD[card[0]]["loc"][1],31,15,countryD[card[0]]["armies"],12,playerD[countryD[card[0]]["owner"]]["color"],-3)
     return bookArmies
 
-def drawcountryarmies(t):
+def drawCountryArmies(t):
     for country in countryD:
-        drawRectangle(t,countryD[country]["loc"][0],countryD[country]["loc"][1],31,15,countryD[country]["armies"],12,playerD[countryD[country]["owner"]]["color"],-3)
-
+        drawRectangle(t,countryD[country]["loc"][0],countryD[country]["loc"][1],31,15,countryD[country]["armies"],12,playerD[countryD[country]["owner"]]["color"],-3)    
+    
 def riskMain():
     bob=cTurtle.Turtle()
     bob.tracer(False)
@@ -382,7 +381,7 @@ def riskMain():
     bob.bgpic("Risk01.gif")
     drawPlayerBoxes(bob,"30",[1,2,3,4])
     player=random.randrange(1,5)
-    firstPlayer=player
+    firstPlayer=player        
     player=autoAssignCountries(bob,player)
     while stillArmiesToPlace(playerD):
         armyPlacement(player,bob,"Placement of Remaining Starting Armies")
@@ -402,10 +401,10 @@ def riskMain():
         #calculate base armies from num of countries
         armiesToPlace=calcBaseArmiesBeginningOfTurn(player)
         #calculate continent(s) bonus
-        continentsBonus=findContinentsBonusBeginningOfTurn(player)
+        continentsBonus=findContinentsBonusBeginningOfTurn(player)   
         #Post total armies to place in corner
         totalArmies=armiesToPlace+continentsBonus+bookArmies
-        playerD[player]["armies"]=totalArmies
+        playerD[player]["armies"]=totalArmies        
         drawPlayerBoxes(bob,totalArmies,[player])
         #Repeat until no armies left in corner
         while stillArmiesToPlace(playerD):
@@ -420,6 +419,4 @@ def riskMain():
             player=nextPlayer(player)
     print("Congratulations player "+str(countryD["Western United States"]["owner"])+", you are the winner!!!")
 
-# Run the game
-if __name__ == "__main__":
-    riskmain()
+riskMain()

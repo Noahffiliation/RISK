@@ -7,19 +7,19 @@ adjacentCountriesD={"Alaska":["Kamchatka","Northwest Territory","Alberta"],
     "Western United States":["Alberta","Ontario","Eastern United States","Central America"],
     "Eastern United States":["Ontario","Eastern Canada","Western United States","Central America"],
     "Central America":["Western United States","Eastern United States","Venezuela"],
-
+    
     "Venezuela":["Central America","Peru","Brazil"],
     "Peru":["Argentina","Brazil","Venezuela"],
     "Brazil":["Argentina","Peru","Venezuela","North Africa"],
     "Argentina":["Peru","Brazil"],
-
+    
     "North Africa":["Brazil","Western Europe","Southern Europe","Egypt","East Africa","Central Africa"],
     "Egypt":["Southern Europe","Middle East","East Africa","North Africa"],
     "East Africa":["Middle East","Central Africa","Madagascar","Egypt","South Africa","North Africa"],
     "Central Africa":["North Africa","East Africa","South Africa"],
     "South Africa":["Central Africa","East Africa","Madagascar"],
     "Madagascar":["South Africa","East Africa"],
-
+    
     "Western Europe":["Great Britain","Northern Europe","Southern Europe","North Africa"],
     "Southern Europe":["Western Europe","Northern Europe","Russia","Middle East","Egypt","North Africa"],
     "Northern Europe":["Great Britain","Scandinavia","Russia","Southern Europe","Western Europe"],
@@ -27,7 +27,7 @@ adjacentCountriesD={"Alaska":["Kamchatka","Northwest Territory","Alberta"],
     "Great Britain":["Iceland","Scandinavia","Northern Europe","Western Europe"],
     "Iceland":["Greenland","Scandinavia","Great Britain"],
     "Scandinavia":["Iceland","Russia","Northern Europe","Great Britain"],
-
+    
     "Ural":["Russia","Siberia","China","Afghanistan"],
     "Siberia":["Ural","Yakutsk","Irkutsk","Mongolia","China"],
     "Yakutsk":["Siberia","Irkutsk","Kamchatka"],
